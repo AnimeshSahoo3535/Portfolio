@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+         background-color: #f0f0f0;
+         margin: 0;
+         padding: 0;
+      }
+      .container {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         margin-top: 50px;
+         padding: 20px;
+         background-color: #fff;
+         border-radius: 8px;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+         font-size: 24px;
+         font-weight: bold;
+         margin-bottom: 20px;
+      }
+      .description {
+         text-align: center;
+         margin-bottom: 20px;
+      }
+      .input-field {
+         margin-bottom: 10px;
+         padding: 8px;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         width: 100%;
+      }
+      .check-btn {
+         padding: 10px 20px;
+         background-color: #007bff;
+         color: #fff;
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+      }
+      .check-btn:hover {
+         background-color: #0056b3;
+      }
+      .error-msg {
+         color: #ff0000;
+         font-size: 14px;
+         margin-top: 10px;
+      }
+      .change-table {
+         margin-top: 20px;
+         width: 100%;
+         border-collapse: collapse;
+      }
+      .change-table th, .change-table td {
+         padding: 8px;
+         text-align: center;
+         border: 1px solid #ccc;
+      }
+   </style>
+</head>
+<body>
+   <div class="container">
+      <div class="header">
+         Payroll Management
+      </div>
+      <p class="description">
+         Enter the bill amount and the cash given by the customer 
+         to calculate the minimum number of notes to return.
+      </p>
+      <label for="input-bill"><strong>Enter the bill amount:</strong></label>
+      <input class="input-field" id="bill" type="number" min="0" step="5">
+      <label for="cash-given"><strong>Cash Given:</strong></label>
+      <input class="input-field" id="cash" type="number" min="0" step="5">
+      <button class="check-btn" id="btn">Check</button>
+      <p class="error-msg" id="error"></p>
+      <table class="change-table">
+         <caption><strong>Change Breakdown</strong></caption>
+         <tr>
+            <th>No. of Notes</th>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+            <td class="no-of-notes"></td>
+         </tr>
+         <tr>
+            <th>Notes</th>
+            <td>2000</td>
+            <td>500</td>
+            <td>100</td>
+            <td>50</td>
+            <td>20</td>
+            <td>10</td>
+            <td>5</td>
+         </tr>
+      </table>
+   </div>
+   <script>
+      var inputBill = document.getElementById("bill");
+      var cashGiven = document.getElementById("cash");
+      var checkBtn = document.getElementById("btn");
+      var errMsg = document.getElementById("error");
+      var noOfNotes = document.querySelectorAll(".no-of-notes");
+      var notes = [2000, 500, 100, 50, 20, 10, 5];
+
+      function errorHandle(error) {
+         errMsg.style.display = "block";
+         errMsg.innerText = error;
+      }
+
+      function hideMessage() {
+         errMsg.style.display = "none";
+      }
+
+      function clickHandler() {
+         hideMessage();
+         if (inputBill.value <= 0 || cashGiven.value <= 0) {
+            errorHandle("Please enter valid amounts.");
+         } else if (cashGiven.value < inputBill.value) {
+            errorHandle("Insufficient cash provided.");
+         } else {
+            var remaining = cashGiven.value - inputBill.value;
+            for (var i = 0; i < notes.length; i++) {
+               const count = Math.floor(remaining / notes[i]);
+               remaining %= notes[i];
+               noOfNotes[i].innerText = count;
+            }
+         }
+      }
+
+      checkBtn.addEventListener("click", clickHandler);
+   </script>
+</body>
+</html>
